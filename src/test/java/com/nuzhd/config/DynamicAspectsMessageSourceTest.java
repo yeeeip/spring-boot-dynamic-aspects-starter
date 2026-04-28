@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Locale;
 
+import static com.nuzhd.messages.DynamicAspectsMessageKeys.CREATE_ASPECTS_START_KEY;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class DynamicAspectsMessageSourceTest {
@@ -15,7 +16,7 @@ class DynamicAspectsMessageSourceTest {
         var messageSource = config.dynamicAspectsMessageSource();
 
         var message = messageSource.getMessage(
-                "dynamic.aspects.info.start",
+                CREATE_ASPECTS_START_KEY,
                 null,
                 Locale.forLanguageTag("ru-RU")
         );
@@ -24,15 +25,15 @@ class DynamicAspectsMessageSourceTest {
     }
 
     @Test
-    void dynamicAspectsMessageSource_ReturnsEmptyMessageFromBaseBundle() {
+    void dynamicAspectsMessageSource_ReturnsMessageFromBaseBundle() {
         var messageSource = config.dynamicAspectsMessageSource();
 
         var message = messageSource.getMessage(
-                "dynamic.aspects.info.start",
+                CREATE_ASPECTS_START_KEY,
                 null,
                 Locale.ROOT
         );
 
-        assertThat(message).isEmpty();
+        assertThat(message).isEqualTo("Creating dynamic aspects...");
     }
 }

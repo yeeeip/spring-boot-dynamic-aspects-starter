@@ -1,9 +1,13 @@
 package com.nuzhd.validation;
 
-public class BeanPointcutValidationService implements PointcutValidationService{
+import org.springframework.context.MessageSource;
 
-    @Override
-    public void validateExpression(String pointcutExpression) {
+import static com.nuzhd.domain.DesignatorType.BEAN;
+import static com.nuzhd.messages.DynamicAspectsMessageKeys.INVALID_POINTCUT_EXPRESSION_KEY;
 
+public class BeanPointcutValidationService extends PointcutValidationService {
+
+    public BeanPointcutValidationService(MessageSource messageSource) {
+        super(messageSource, BEAN, INVALID_POINTCUT_EXPRESSION_KEY);
     }
 }

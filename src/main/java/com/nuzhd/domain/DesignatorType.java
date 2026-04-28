@@ -1,7 +1,5 @@
 package com.nuzhd.domain;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.Arrays;
 
 /// [Supported Designators](https://docs.spring.io/spring-framework/reference/core/aop/ataspectj/pointcuts.html#aop-pointcuts-designators)
@@ -33,10 +31,9 @@ public enum DesignatorType {
     }
 
     public static DesignatorType fromValue(String designator) {
-        return Arrays.stream(DesignatorType.getValues())
-                     .map(String::toUpperCase)
-                     .filter(value -> StringUtils.equalsIgnoreCase(designator, value))
-                     .map(DesignatorType::valueOf)
+        return Arrays.stream(DesignatorType.values())
+                     .filter(designatorType -> !INVALID.equals(designatorType))
+                     .filter(designatorType -> designatorType.value.equalsIgnoreCase(designator))
                      .findFirst()
                      .orElse(DesignatorType.INVALID);
     }

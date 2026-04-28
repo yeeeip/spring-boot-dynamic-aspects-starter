@@ -1,9 +1,13 @@
 package com.nuzhd.validation;
 
-public class AtWithinPointcutValidationService implements PointcutValidationService{
+import org.springframework.context.MessageSource;
 
-    @Override
-    public void validateExpression(String pointcutExpression) {
+import static com.nuzhd.domain.DesignatorType.AT_WITHIN;
+import static com.nuzhd.messages.DynamicAspectsMessageKeys.INVALID_POINTCUT_EXPRESSION_KEY;
 
+public class AtWithinPointcutValidationService extends PointcutValidationService {
+
+    public AtWithinPointcutValidationService(MessageSource messageSource) {
+        super(messageSource, AT_WITHIN, INVALID_POINTCUT_EXPRESSION_KEY);
     }
 }

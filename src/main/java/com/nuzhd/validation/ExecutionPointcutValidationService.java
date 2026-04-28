@@ -9,15 +9,22 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Locale;
 
+import static com.nuzhd.messages.DynamicAspectsMessageKeys.CLASS_NOT_FOUND_KEY;
+import static com.nuzhd.messages.DynamicAspectsMessageKeys.INVALID_EXECUTION_EXPRESSION_KEY;
+import static com.nuzhd.messages.DynamicAspectsMessageKeys.METHOD_NOT_FOUND_KEY;
+import static com.nuzhd.messages.DynamicAspectsMessageKeys.WRONG_ACCESS_MODIFIER_KEY;
+import static com.nuzhd.messages.DynamicAspectsMessageKeys.WRONG_RETURN_TYPE_KEY;
 import static com.nuzhd.utils.PointcutExpressionUtils.extractClassName;
 import static com.nuzhd.utils.PointcutExpressionUtils.extractMethodName;
+import static com.nuzhd.domain.DesignatorType.EXECUTION;
 
 @Component
-public class ExecutionPointcutValidationService implements PointcutValidationService {
+public class ExecutionPointcutValidationService extends PointcutValidationService {
 
     private final MessageSource messageSource;
 
     public ExecutionPointcutValidationService(MessageSource messageSource) {
+        super(messageSource, EXECUTION, INVALID_EXECUTION_EXPRESSION_KEY);
         this.messageSource = messageSource;
     }
 

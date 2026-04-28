@@ -23,6 +23,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import static com.nuzhd.messages.DynamicAspectsMessageKeys.CANT_CREATE_ASPECT_KEY;
+import static com.nuzhd.messages.DynamicAspectsMessageKeys.CREATE_ASPECT_SUCCESS_KEY;
+import static com.nuzhd.messages.DynamicAspectsMessageKeys.LIST_EMPTY_KEY;
+
 /// Класс, создающий динамические аспекты на основе pointcut выражений из файла конфигурации.
 ///
 /// На текущий момент доступно только создание аспектов типа @Around
@@ -41,9 +45,6 @@ public class DynamicAspectsCreator implements BeanFactoryPostProcessor {
 
     private final Map<DesignatorType, PointcutValidationService> validators;
     private final MessageSource messageSource;
-    private static final String LIST_EMPTY_KEY = "dynamic.aspects.expressions.empty";
-    private static final String CANT_CREATE_ASPECT_KEY = "dynamic.aspects.error.cant-create-aspect";
-    private static final String CREATE_ASPECT_SUCCESS_KEY = "dynamic.aspects.success.created-aspect";
 
     public DynamicAspectsCreator(
             Environment environment,
@@ -53,7 +54,8 @@ public class DynamicAspectsCreator implements BeanFactoryPostProcessor {
     ) {
         var binder = Binder.get(environment);
         around = binder.bind(POINTCUTS_PATH,
-                             Bindable.setOf(String.class)).get(); // @Value при текущей реализации не работает
+                             Bindable.setOf(String.class)).orElse(
+                Set.of()); // @Value при текущей реализации не работает
         if (this.around.isEmpty()) {
             LOGGER.warn(messageSource.getMessage(LIST_EMPTY_KEY, new Object[] {POINTCUTS_PATH}, Locale.ROOT));
         }
@@ -70,7 +72,8 @@ public class DynamicAspectsCreator implements BeanFactoryPostProcessor {
             try {
                 pointcut.setExpression(expr);
             } catch (IllegalArgumentException e) {
-                LOGGER.error(messageSource.getMessage(CANT_CREATE_ASPECT_KEY, new Object[] {expr}, Locale.ROOT));
+                LOGGER.error(messageSource.getMessage(CANT_CREATE_ASPECT_KEY, new Object[] {expr, e.getMessage()},
+                                                      Locale.ROOT));
                 continue;
             }
 

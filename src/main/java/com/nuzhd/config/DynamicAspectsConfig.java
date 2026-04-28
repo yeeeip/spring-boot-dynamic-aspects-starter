@@ -16,13 +16,13 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import java.util.Locale;
 import java.util.Map;
 
+import static com.nuzhd.messages.DynamicAspectsMessageKeys.CREATE_ASPECTS_START_KEY;
+
 @Configuration
 @ConditionalOnProperty(name = "app.dynamic-aspects.enabled", havingValue = "true")
 public class DynamicAspectsConfig {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DynamicAspectsConfig.class);
-    private static final String CREATE_ASPECTS_START_KEY = "dynamic.aspects.info.start";
-
 
     @Bean
     public static DynamicAspectsCreator customAdvisorsConfiguration(
@@ -45,15 +45,15 @@ public class DynamicAspectsConfig {
     ) {
         return Map.of(
                 DesignatorType.EXECUTION, new ExecutionPointcutValidationService(messageSource),
-                DesignatorType.WITHIN, new WithinPointcutValidationService(),
-                DesignatorType.THIS, new ThisPointcutValidationService(),
-                DesignatorType.TARGET, new TargetPointcutValidationService(),
-                DesignatorType.ARGS, new ArgsPointcutValidationService(),
-                DesignatorType.AT_TARGET, new AtTargetPointcutValidationService(),
-                DesignatorType.AT_ARGS, new AtArgsPointcutValidationService(),
-                DesignatorType.AT_WITHIN, new AtWithinPointcutValidationService(),
-                DesignatorType.AT_ANNOTATION, new AtAnnotationPointcutValidationService(),
-                DesignatorType.BEAN, new BeanPointcutValidationService()
+                DesignatorType.WITHIN, new WithinPointcutValidationService(messageSource),
+                DesignatorType.THIS, new ThisPointcutValidationService(messageSource),
+                DesignatorType.TARGET, new TargetPointcutValidationService(messageSource),
+                DesignatorType.ARGS, new ArgsPointcutValidationService(messageSource),
+                DesignatorType.AT_TARGET, new AtTargetPointcutValidationService(messageSource),
+                DesignatorType.AT_ARGS, new AtArgsPointcutValidationService(messageSource),
+                DesignatorType.AT_WITHIN, new AtWithinPointcutValidationService(messageSource),
+                DesignatorType.AT_ANNOTATION, new AtAnnotationPointcutValidationService(messageSource),
+                DesignatorType.BEAN, new BeanPointcutValidationService(messageSource)
         );
     }
 

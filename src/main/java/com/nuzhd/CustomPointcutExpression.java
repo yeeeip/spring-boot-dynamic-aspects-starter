@@ -12,10 +12,10 @@ import java.util.Locale;
 import java.util.Map;
 
 import static com.nuzhd.domain.DesignatorType.INVALID;
+import static com.nuzhd.messages.DynamicAspectsMessageKeys.INVALID_DESIGNATOR_KEY;
 
 public class CustomPointcutExpression extends AspectJExpressionPointcut {
 
-    private static final String INVALID_DESIGNATOR_KEY = "dynamic.aspects.error.invalid-designator";
     private final Map<DesignatorType, PointcutValidationService> validators;
     private final MessageSource messageSource;
 

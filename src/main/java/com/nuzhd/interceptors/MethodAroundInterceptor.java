@@ -11,13 +11,14 @@ import org.springframework.context.MessageSource;
 import java.util.Arrays;
 import java.util.Locale;
 
+import static com.nuzhd.messages.DynamicAspectsMessageKeys.METHOD_CALLED_KEY;
+import static com.nuzhd.messages.DynamicAspectsMessageKeys.METHOD_EXECUTED_KEY;
+
 public class MethodAroundInterceptor implements MethodInterceptor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodAroundInterceptor.class);
 
     private final MessageSource messageSource;
-    private static final String METHOD_CALLED_KEY = "dynamic.aspects.info.method_called";
-    private static final String METHOD_EXECUTED_KEY = "dynamic.aspects.info.method_executed";
 
     public MethodAroundInterceptor(MessageSource messageSource) {
         this.messageSource = messageSource;
