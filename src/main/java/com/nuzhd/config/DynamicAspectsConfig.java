@@ -13,8 +13,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.env.ConfigurableEnvironment;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static com.nuzhd.messages.DynamicAspectsMessageKeys.CREATE_ASPECTS_START_KEY;
 
@@ -25,7 +28,7 @@ public class DynamicAspectsConfig {
     private static final Logger LOGGER = LoggerFactory.getLogger(DynamicAspectsConfig.class);
 
     @Bean
-    public static DynamicAspectsCreator customAdvisorsConfiguration(
+    public DynamicAspectsCreator customAdvisorsConfiguration(
             ConfigurableEnvironment environment,
             Map<DesignatorType, PointcutValidationService> validators,
             MessageSource messageSource) {
@@ -34,27 +37,18 @@ public class DynamicAspectsConfig {
     }
 
     @Bean
-    public static MethodAroundInterceptor methodAroundInterceptor(
+    public MethodAroundInterceptor methodAroundInterceptor(
             MessageSource messageSource) {
         return new MethodAroundInterceptor(messageSource);
     }
 
     @Bean(name = "validators")
-    public Map<DesignatorType, PointcutValidationService> pointcutValidators(
-            MessageSource messageSource
-    ) {
-        return Map.of(
-                DesignatorType.EXECUTION, new ExecutionPointcutValidationService(messageSource),
-                DesignatorType.WITHIN, new WithinPointcutValidationService(messageSource),
-                DesignatorType.THIS, new ThisPointcutValidationService(messageSource),
-                DesignatorType.TARGET, new TargetPointcutValidationService(messageSource),
-                DesignatorType.ARGS, new ArgsPointcutValidationService(messageSource),
-                DesignatorType.AT_TARGET, new AtTargetPointcutValidationService(messageSource),
-                DesignatorType.AT_ARGS, new AtArgsPointcutValidationService(messageSource),
-                DesignatorType.AT_WITHIN, new AtWithinPointcutValidationService(messageSource),
-                DesignatorType.AT_ANNOTATION, new AtAnnotationPointcutValidationService(messageSource),
-                DesignatorType.BEAN, new BeanPointcutValidationService(messageSource)
-        );
+    public Map<DesignatorType, PointcutValidationService> pointcutValidators(List<PointcutValidationService> services) {
+        return services.stream()
+                       .collect(Collectors.toUnmodifiableMap(
+                               PointcutValidationService::getDesignatorType,
+                               Function.identity()
+                       ));
     }
 
     @Bean

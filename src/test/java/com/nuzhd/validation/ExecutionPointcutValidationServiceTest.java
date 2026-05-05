@@ -149,7 +149,7 @@ class ExecutionPointcutValidationServiceTest {
     @Test
     void setExpression_ExecutionDesignator_ComplexExpression_CorrectExpression() {
         assertDoesNotThrow(
-                () -> pointcut.setExpression("execution(* com.nuzhd.SomeClass.*(..)) && args(accountHolderNamePattern)")
+                () -> pointcut.setExpression("execution(* com.nuzhd.validation.ExecutionPointcutValidationServiceTest.*(..)) && args(java.lang.String)")
         );
     }
 }

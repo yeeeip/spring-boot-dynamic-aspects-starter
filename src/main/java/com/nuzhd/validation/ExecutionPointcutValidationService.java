@@ -31,7 +31,7 @@ public class ExecutionPointcutValidationService extends PointcutValidationServic
     @Override
     public void validateExpression(String pointcutExpression) throws IllegalArgumentException {
         // Разделение на модификаторы доступа, тип возвращаемого значения, имя класса и метода
-        String[] parts = pointcutExpression.split("\\s+");
+        String[] parts = pointcutExpression.trim().split("\\s+");
 
         if (parts.length < 2) {
             throw new IllegalArgumentException(
@@ -49,6 +49,7 @@ public class ExecutionPointcutValidationService extends PointcutValidationServic
             returnType = parts[1];
             rowClassName = parts[2];
         } else {
+            super.validateExpression(pointcutExpression);
             return;
         }
 

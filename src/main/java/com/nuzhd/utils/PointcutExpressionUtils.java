@@ -19,15 +19,24 @@ public class PointcutExpressionUtils {
     }
 
     public static String extractExpression(String rawExpression, DesignatorType designator) {
-        return switch (designator) {
-            case EXECUTION -> StringUtils.substring(rawExpression, 10, rawExpression.length() - 1);
-            case WITHIN, TARGET -> StringUtils.substring(rawExpression, 7, rawExpression.length() - 1);
-            case THIS, ARGS, BEAN -> StringUtils.substring(rawExpression, 5, rawExpression.length() - 1);
-            case AT_ARGS -> StringUtils.substring(rawExpression, 6, rawExpression.length() - 1);
-            case AT_TARGET, AT_WITHIN -> StringUtils.substring(rawExpression, 8, rawExpression.length() - 1);
-            case AT_ANNOTATION -> StringUtils.substring(rawExpression, 12, rawExpression.length() - 1);
-            case INVALID -> StringUtils.EMPTY;
-        };
+        if (designator == DesignatorType.INVALID || StringUtils.isBlank(rawExpression)) {
+            return StringUtils.EMPTY;
+        }
+
+        var trimmed = rawExpression.trim();
+        var openParenIndex = trimmed.indexOf('(');
+        var closeParenIndex = trimmed.lastIndexOf(')');
+
+        if (openParenIndex < 0 || closeParenIndex <= openParenIndex) {
+            return StringUtils.EMPTY;
+        }
+
+        var prefix = trimmed.substring(0, openParenIndex).trim();
+        if (!StringUtils.equalsIgnoreCase(prefix, designator.getValue())) {
+            return StringUtils.EMPTY;
+        }
+
+        return trimmed.substring(openParenIndex + 1, closeParenIndex);
     }
 
 }

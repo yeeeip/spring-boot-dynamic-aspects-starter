@@ -9,6 +9,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Locale;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import static com.nuzhd.domain.DesignatorType.ARGS;
@@ -27,7 +28,18 @@ class BasicPointcutValidationServiceTest {
     void setUp() {
         config = new DynamicAspectsConfig();
         var messageSource = config.dynamicAspectsMessageSource();
-        pointcut = new CustomPointcutExpression(config.pointcutValidators(messageSource), messageSource);
+        Map<DesignatorType, PointcutValidationService> validators = Map.of(
+                DesignatorType.WITHIN, new WithinPointcutValidationService(messageSource),
+                DesignatorType.THIS, new ThisPointcutValidationService(messageSource),
+                DesignatorType.TARGET, new TargetPointcutValidationService(messageSource),
+                DesignatorType.ARGS, new ArgsPointcutValidationService(messageSource),
+                DesignatorType.AT_TARGET, new AtTargetPointcutValidationService(messageSource),
+                DesignatorType.AT_ARGS, new AtArgsPointcutValidationService(messageSource),
+                DesignatorType.AT_WITHIN, new AtWithinPointcutValidationService(messageSource),
+                DesignatorType.AT_ANNOTATION, new AtAnnotationPointcutValidationService(messageSource),
+                DesignatorType.BEAN, new BeanPointcutValidationService(messageSource)
+        );
+        pointcut = new CustomPointcutExpression(validators, messageSource);
     }
 
     @ParameterizedTest

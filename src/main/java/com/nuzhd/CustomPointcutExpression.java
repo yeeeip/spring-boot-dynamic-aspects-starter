@@ -27,7 +27,7 @@ public class CustomPointcutExpression extends AspectJExpressionPointcut {
 
     @Override
     protected void onSetExpression(String expression) throws IllegalArgumentException {
-        DesignatorType designatorType = DesignatorType.fromValue(StringUtils.substringBefore(expression, "("));
+        DesignatorType designatorType = DesignatorType.fromValue(StringUtils.trim(StringUtils.substringBefore(expression, "(")));
         if (INVALID.equals(designatorType)) {
             throw new IllegalArgumentException(
                     messageSource.getMessage(INVALID_DESIGNATOR_KEY,
@@ -35,7 +35,14 @@ public class CustomPointcutExpression extends AspectJExpressionPointcut {
                                              Locale.ROOT));
         }
         String expressionBody = PointcutExpressionUtils.extractExpression(expression, designatorType);
-        validators.get(designatorType).validateExpression(expressionBody);
+        var validator = validators.get(designatorType);
+        if (validator == null) {
+            throw new IllegalArgumentException(
+                    messageSource.getMessage(INVALID_DESIGNATOR_KEY,
+                                             new Object[] {Arrays.toString(DesignatorType.getValues())},
+                                             Locale.ROOT));
+        }
+        validator.validateExpression(expressionBody);
     }
 
 }

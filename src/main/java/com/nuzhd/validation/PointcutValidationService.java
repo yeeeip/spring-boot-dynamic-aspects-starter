@@ -41,6 +41,10 @@ public abstract class PointcutValidationService {
         return messageSource;
     }
 
+    public DesignatorType getDesignatorType() {
+        return designatorType;
+    }
+
     private IllegalArgumentException invalidExpressionException(IllegalArgumentException cause) {
         var message = messageSource.getMessage(
                 invalidExpressionKey,
