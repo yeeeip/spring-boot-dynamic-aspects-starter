@@ -59,7 +59,7 @@
     <repository>
       <id>github</id>
       <name>GitHub Packages</name>
-      <url>https://maven.pkg.github.com/yeeeip/spring-boot-dynamic-aspects-starter</url>
+      <url>https://maven.pkg.github.com/whyareyousleepy/spring-boot-dynamic-aspects-starter</url>
     </repository>
   </distributionManagement>
 
